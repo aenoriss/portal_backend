@@ -30,8 +30,7 @@ async def handle_connection(websocket, path):
             break
 
 async def main():
-    print("asdasdasdasdas")
-    server = await websockets.serve(handle_connection, '0.0.0.0')
+    server = await websockets.serve(handle_connection, '0.0.0.0', 3001)
     await server.wait_closed()
 
 asyncio.run(main())
