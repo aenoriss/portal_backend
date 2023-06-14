@@ -1,9 +1,12 @@
 import asyncio
 import websockets
 import binascii
+import os
 from io import BytesIO
 
 from PIL import Image, UnidentifiedImageError
+
+PORT = int(os.environ.get('PORT', 3000))
 
 def is_valid_image(image_bytes):
     try:
@@ -30,7 +33,7 @@ async def handle_connection(websocket, path):
             break
 
 async def main():
-    server = await websockets.serve(handle_connection, '0.0.0.0', 3000)
+    server = await websockets.serve(handle_connection, '0.0.0.0', PORT)
     await server.wait_closed()
 
 asyncio.run(main())
