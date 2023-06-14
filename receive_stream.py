@@ -20,6 +20,7 @@ async def handle_connection(websocket, path):
     while True:
         try:
             message = await websocket.recv()
+            print(message)
             print(len(message))
             if len(message) > 5000:
                   if is_valid_image(message):
