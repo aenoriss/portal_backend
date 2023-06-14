@@ -24,4 +24,4 @@ def handle_message(message):
     emit('message', f'You sent: {message}')
 
 if __name__ == '__main__':
-    socketio.run(app, host='0.0.0.0', port=3001)
+    socketio.run(app, host='0.0.0.0', port=3001, allow_unsafe_werkzeug=True)
