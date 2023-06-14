@@ -33,6 +33,7 @@ async def handle_connection(websocket, path):
             break
 
 async def main():
+    print("xDDd")
     server = await websockets.serve(handle_connection, '0.0.0.0', PORT)
     await server.wait_closed()
 
