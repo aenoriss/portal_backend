@@ -2,4 +2,3 @@ Pillow
 websockets
 asyncio
 flask 
-flask-socketio

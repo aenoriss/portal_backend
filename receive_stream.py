@@ -37,4 +37,5 @@ async def main():
     server = await websockets.serve(handle_connection, '0.0.0.0', PORT)
     await server.wait_closed()
 
+print("sadsadasdasd")
 asyncio.run(main())
