@@ -1,27 +1,36 @@
-from flask import Flask, render_template
-from flask_socketio import SocketIO, emit
+import asyncio
+import websockets
+import binascii
+from io import BytesIO
 
-app = Flask(__name__)
-app.config['SECRET_KEY'] = 'secret_key'
-socketio = SocketIO(app)
+from PIL import Image, UnidentifiedImageError
 
-@app.route('/')
-def index():
-    return render_template('index.html')
+def is_valid_image(image_bytes):
+    try:
+        Image.open(BytesIO(image_bytes))
+        # print("image OK")
+        return True
+    except UnidentifiedImageError:
+        print("image invalid")
+        return False
 
-@socketio.on('connect')
-def handle_connect():
-    print('Client connected')
-    emit('message', 'Welcome to the WebSocket server!')
+async def handle_connection(websocket, path):
+    while True:
+        try:
+            message = await websocket.recv()
+            print(len(message))
+            if len(message) > 5000:
+                  if is_valid_image(message):
+                          #print(message)
+                          with open("image.jpg", "wb") as f:
+                                f.write(message)
 
-@socketio.on('disconnect')
-def handle_disconnect():
-    print('Client disconnected')
+            print()
+        except websockets.exceptions.ConnectionClosed:
+            break
 
-@socketio.on('message')
-def handle_message(message):
-    print('Received message:', message)
-    emit('message', f'You sent: {message}')
+async def main():
+    server = await websockets.serve(handle_connection, '0.0.0.0', 3001)
+    await server.wait_closed()
 
-if __name__ == '__main__':
-    socketio.run(app, host='0.0.0.0', port=3001, allow_unsafe_werkzeug=True)
+asyncio.run(main())
